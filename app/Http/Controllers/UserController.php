@@ -54,9 +54,11 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        $user = \App\Models\User::findOrFail($id)->load('perfil');
+        $user = \App\Models\User::findOrFail($id)
+           ->load(['perfil', 'interests']);
+        $roles = \App\Models\Role::all();
 
-        return view('users.edit', compact('user'));
+        return view('users.edit', compact('user', 'roles'));
     }
 
     /**
@@ -75,7 +77,7 @@ class UserController extends Controller
         $user->save();
 
         return redirect()
-            ->route('users.index')
+            ->route('users.edit', $id)
             ->with('success', 'Usuário atualizado com sucesso!');
     }
 
@@ -102,7 +104,38 @@ class UserController extends Controller
         \App\Models\Perfil::updateOrCreate(['user_id' => $id], $request->all());
 
         return redirect()
-            ->route('users.index')
+            ->route('users.edit', $id)
             ->with('success', 'Perfil do usuário atualizado com sucesso!');
+    }
+
+    public function interests(Request $request, string $id) {
+        $user = \App\Models\User::findOrFail($id);
+
+        $inputs = $request->validate([
+            'interests' => 'nullable|array'
+        ]);
+
+        $user->interests()->delete();
+        if(!empty($inputs['interests'])){
+        $user->interests()->createMany($inputs['interests']);
+        }
+
+        return redirect()
+            ->route('users.edit', $id)
+            ->with('success', 'Interesses do usuário atualizados com sucesso!');
+    }
+
+    public function roles(Request $request, string $id) {
+        $user = \App\Models\User::findOrFail($id);
+
+        $inputs = $request->validate([
+            'roles' => 'nullable|array'
+        ]);
+
+        $user->roles()->sync($inputs['roles'] ?? []);
+
+        return redirect()
+            ->route('users.edit', $id)
+            ->with('success', 'Funções do usuário atualizadas com sucesso!');
     }
 }

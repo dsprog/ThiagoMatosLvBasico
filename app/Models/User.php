@@ -49,4 +49,12 @@ class User extends Authenticatable
     public function perfil() {
         return $this->hasOne(\App\Models\Perfil::class);
     }
+
+    public function interests() {
+        return $this->hasMany(\App\Models\Interests::class);
+    }
+
+    public function roles() {
+        return $this->belongsToMany(\App\Models\Role::class);
+    }
 }
