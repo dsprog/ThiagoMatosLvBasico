@@ -12,6 +12,14 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
+                <form action="{{ route('users.index') }}" method="GET">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="search" placeholder="Nome ou E-mail" aria-label="Nome ou E-mail" aria-describedby="button-addon2">
+                    <button class="btn btn-primary" type="submit" id="button-addon2">Buscar</button>
+                    <a class="btn btn-warning" href="{{ route('users.index') }}" id="button-addon2">Limpar</a>
+                </div>
+                </form>
+
                 <table class="table table-striped table-hover">
                     <thead>
                       <tr>
