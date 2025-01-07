@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -59,6 +60,7 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
+        Gate::authorize('edit', \App\Models\User::class);
         $user = \App\Models\User::findOrFail($id)
            ->load(['perfil', 'interests']);
         $roles = \App\Models\Role::all();
@@ -91,6 +93,7 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
+        Gate::authorize('destroy', \App\Models\User::class);
         $user = \App\Models\User::findOrFail($id);
         $user->delete();
         return redirect()

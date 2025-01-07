@@ -19,7 +19,6 @@
                     <a class="btn btn-warning" href="{{ route('users.index') }}" id="button-addon2">Limpar</a>
                 </div>
                 </form>
-
                 <table class="table table-striped table-hover">
                     <thead>
                       <tr>
@@ -36,14 +35,18 @@
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->email }}</td>
                         <td style="width: 100px;">
+                            @can('edit', App\Models\User::class)
                             <a href="{{ route('users.edit', $user) }}" class="link-primary m-0 px-1 py-0"><i class="bi bi-pencil"></i></a>
+                            @endcan
                             <a href="{{ route('users.show', $user) }}" class="link-primary m-0 px-1 py-0"><i class="bi bi-eye"></i></a>
+                            @can('destroy', App\Models\User::class)
                             <form action="{{ route('users.destroy', $user) }}" method="POST" style="display: inline-block;">
                                 @csrf @method('DELETE')
                                 <button type="submit" class="link-danger bg-transparent border-0 m-0 px-1 py-0">
                                     <i class="bi bi-trash"></i>
                                 </button>
                             </form>
+                            @endcan
                         </td>
                       </tr>
                       @endforeach
